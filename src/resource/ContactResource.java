@@ -147,16 +147,13 @@ public class ContactResource {
 	 * 
 	 * @param id
 	 *            identifier of contact
-	 * @return response 200 OK if contact can delete, otherwise response 404 NOT
-	 *         FOUND
+	 * @return response 200 OK if contact can delete or otherwise
 	 */
 	@DELETE
 	@Path("{id}")
 	public Response deleteContact(@PathParam("id") String id) {
-		if (dao.delete(Long.parseLong(id))) {
-			return Response.ok().build();
-		}
-		return Response.status(Response.Status.NOT_FOUND).build();
+		dao.delete(Long.parseLong(id));
+		return Response.ok().build();
 	}
 
 	/**
