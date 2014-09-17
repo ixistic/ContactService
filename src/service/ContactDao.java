@@ -20,12 +20,13 @@ public class ContactDao {
 	public ContactDao() {
 		contacts = new ArrayList<Contact>();
 		nextId = new AtomicLong(1000L);
-		// createTestContact(1);
+		createTestContact(1);
 	}
 
 	/** add a single contact with given id for testing. */
 	private void createTestContact(long id) {
-		Contact test = new Contact("Test contact", "Joe Experimental","none@testing.com", "0812345678");
+		Contact test = new Contact("Test contact", "Joe Experimental",
+				"none@testing.com", "0812345678");
 		test.setId(id);
 		contacts.add(test);
 	}
@@ -56,8 +57,10 @@ public class ContactDao {
 	public List<Contact> findByTitle(String title) {
 		List<Contact> result = new ArrayList<Contact>();
 		for (Contact c : contacts)
-			if (c.getTitle().contains(title)) {
-				result.add(c);
+			if (c.getTitle() != null) {
+				if (c.getTitle().contains(title)) {
+					result.add(c);
+				}
 			}
 		return result;
 	}

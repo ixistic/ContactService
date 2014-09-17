@@ -21,6 +21,7 @@ public class Contact implements Serializable {
 	@XmlAttribute
 	private long id;
 	private String name;
+	//TODO how to specify a required element or attribute of an entity;
 	private String title;
 	private String email;
 	private String phoneNumber;

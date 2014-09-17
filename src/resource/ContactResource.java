@@ -121,8 +121,8 @@ public class ContactResource {
 	 *            identifier of contact
 	 * @param element
 	 *            xml file in JAXBElement for unmarshal data
-	 * @return response 200 OK if contact can update, otherwise response 404 NOT
-	 *         FOUND
+	 * @return response 200 OK if contact can update, if invalid data response
+	 *         400 BAD REQUEST, otherwise response 404 NOT FOUND
 	 */
 	@PUT
 	@Path("{id}")
@@ -130,6 +130,9 @@ public class ContactResource {
 	public Response putContact(@PathParam("id") String id,
 			JAXBElement<Contact> element) {
 		Contact contact = element.getValue();
+		if (!(contact.getId() + "").equals(id)) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
 		contact.setId(Long.parseLong(id));
 		if (dao.update(contact)) {
 			URI uri = uriInfo.getAbsolutePath();
