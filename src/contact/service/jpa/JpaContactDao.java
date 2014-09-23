@@ -35,7 +35,7 @@ public class JpaContactDao implements ContactDao {
 	 */
 	public JpaContactDao(EntityManager em) {
 		this.em = em;
-//		createTestContact();
+		// createTestContact();
 	}
 
 	/** add contacts for testing. */
@@ -61,8 +61,7 @@ public class JpaContactDao implements ContactDao {
 	 */
 	@Override
 	public Contact find(long id) {
-		return em.find(Contact.class, id); // isn't this sooooo much easier than
-											// JDBC?
+		return em.find(Contact.class, id);
 	}
 
 	/**

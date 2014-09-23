@@ -26,15 +26,23 @@ public class MemContactDao implements ContactDao {
 	private List<Contact> contacts;
 	private AtomicLong nextId;
 
+	/**
+	 * Construct list of contact.
+	 */
 	public MemContactDao() {
 		contacts = new ArrayList<Contact>();
 		Contacts contactsList = importFile("ContactService.xml");
-		if(contactsList != null)
+		if (contactsList != null)
 			contacts = contactsList.getContacts();
 		nextId = new AtomicLong(1000L);
-//		createTestContact(1);
+		// createTestContact(1);
 	}
 
+	/**
+	 * Import list of contact from xml source file.
+	 * @param path path of file
+	 * @return contacts that list of contact
+	 */
 	public Contacts importFile(String path) {
 		JAXBContext ctx;
 		Object obj = null;
@@ -51,7 +59,9 @@ public class MemContactDao implements ContactDao {
 		return contacts;
 	}
 
-	/** add a single contact with given id for testing. */
+	/** 
+	 * Add a single contact with given id for testing.
+	 */
 	private void createTestContact(long id) {
 		Contact test = new Contact("Test contact", "Joe Experimental",
 				"none@testing.com", "0812345678");

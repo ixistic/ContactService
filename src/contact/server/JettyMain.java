@@ -74,9 +74,7 @@ public class JettyMain {
 	static final String RESOURCE_PACKAGE = "contact.resource";
 
 	/**
-	 * Create a Jetty server and a context, add Jetty ServletContainer which
-	 * dispatches requests to JAX-RS resource objects, and start the Jetty
-	 * server.
+	 * Start Server.
 	 * 
 	 * @param args
 	 *            not used
@@ -89,6 +87,15 @@ public class JettyMain {
 		stopServer();
 	}
 
+	/**
+	 * Create a Jetty server and a context, add Jetty ServletContainer which
+	 * dispatches requests to JAX-RS resource objects, and start the Jetty
+	 * server.
+	 * 
+	 * @param port running port of server
+	 * @return path of server
+	 * @throws Exception if Jetty server encounters any problem
+	 */
 	public static String startServer(int port) throws Exception {
 		server = new Server(port);
 		ServletContextHandler context = new ServletContextHandler(
@@ -108,6 +115,9 @@ public class JettyMain {
 		return server.getURI().toString();
 	}
 
+	/**
+	 * Stop the Jetty server and shutdown Dao.
+	 */
 	public static void stopServer() {
 		System.out.println("Stopping server.");
 		DaoFactory.getInstance().shutdown();

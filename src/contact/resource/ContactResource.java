@@ -99,7 +99,7 @@ public class ContactResource {
 	 * @param element
 	 * @param uriInfo
 	 * @return response 201 CREATED if create success that show location header.
-	 *         If same id response 409 CONFLICT
+	 *         If same id response 409 CONFLICT, otherwise 400 BAD REQUEST
 	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)

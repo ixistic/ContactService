@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -18,17 +19,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  * @author jim, Veerapat Threeravipark 5510547022
  */
-@Entity 
-@Table(name="contact")
+@Entity
+@Table(name = "contact")
 @XmlRootElement(name = "contact")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Contact implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@XmlAttribute
 	private long id;
 	private String name;
+	@XmlElement(required=true,nillable=false)
 	private String title;
 	private String email;
 	private String phoneNumber;
@@ -132,18 +134,18 @@ public class Contact implements Serializable {
 			throw new IllegalArgumentException(
 					"Update contact must have same id as contact to update");
 		// Since title is used to display contacts, don't allow empty title
-//		if (!isEmpty(update.getTitle()))
-			this.setTitle(update.getTitle()); // empty nickname is ok
-//		// other attributes: allow an empty string as a way of deleting an
-//		// attribute in update (this is hacky)
-//		if (update.getName() != null)
-			this.setName(update.getName());
-//		if (update.getEmail() != null)
-			this.setEmail(update.getEmail());
-//		if (update.getPhoneNumber() != null)
-			this.setPhoneNumber(update.getPhoneNumber());
-//		if (update.getPhotoUrl() != null)
-			this.setPhotoUrl(update.getPhotoUrl());
+		// if (!isEmpty(update.getTitle()))
+		this.setTitle(update.getTitle()); // empty nickname is ok
+		// // other attributes: allow an empty string as a way of deleting an
+		// // attribute in update (this is hacky)
+		// if (update.getName() != null)
+		this.setName(update.getName());
+		// if (update.getEmail() != null)
+		this.setEmail(update.getEmail());
+		// if (update.getPhoneNumber() != null)
+		this.setPhoneNumber(update.getPhoneNumber());
+		// if (update.getPhotoUrl() != null)
+		this.setPhotoUrl(update.getPhotoUrl());
 	}
 
 	/**

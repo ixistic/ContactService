@@ -28,12 +28,17 @@ public class MemDaoFactory extends DaoFactory {
 		daoInstance = new MemContactDao();
 	}
 
+	/**
+	 * Get the instance of DaoFactory.
+	 * @return instance of DaoFactory.
+	 */
 	public static MemDaoFactory getInstance() {
 		if (factory == null)
 			factory = new MemDaoFactory();
 		return factory;
 	}
 
+	@Override
 	public ContactDao getContactDao() {
 		return daoInstance;
 	}

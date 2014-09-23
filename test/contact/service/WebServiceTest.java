@@ -20,6 +20,12 @@ import org.junit.Test;
 
 import contact.server.JettyMain;
 
+/**
+ * JUnit test to test the Contact web service.
+ * 
+ * @author Veerapat Threeravipark 5510547022
+ * 
+ */
 public class WebServiceTest {
 	private static String serviceUrl;
 	private static HttpClient client;
@@ -28,15 +34,10 @@ public class WebServiceTest {
 	public static void doFirst() {
 		// Start the Jetty server.
 		// Suppose this method returns the URL (with port) of the server
-		String uri = "";
 		try {
-			uri = JettyMain.startServer(8080);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		serviceUrl = uri + "contacts/";
-		client = new HttpClient();
-		try {
+			String url = JettyMain.startServer(8080);
+			serviceUrl = url + "contacts/";
+			client = new HttpClient();
 			client.start();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,7 +54,10 @@ public class WebServiceTest {
 		}
 		JettyMain.stopServer();
 	}
-	
+
+	/**
+	 * Response 201 CREATED if post success.
+	 */
 	@Test
 	public void testPostSuccess() {
 		System.out.println("POST");
@@ -73,9 +77,13 @@ public class WebServiceTest {
 			e.printStackTrace();
 		}
 		System.out.println(contentRes.getStatus());
-		assertEquals(Response.Status.CREATED.getStatusCode(), contentRes.getStatus());
+		assertEquals(Response.Status.CREATED.getStatusCode(),
+				contentRes.getStatus());
 	}
-	
+
+	/**
+	 * Response 409 CONFLICT if post the same contact id.
+	 */
 	@Test
 	public void testPostFail() {
 		System.out.println("POST");
@@ -98,6 +106,9 @@ public class WebServiceTest {
 				contentRes.getStatus());
 	}
 
+	/**
+	 * Response 200 OK if get success.
+	 */
 	@Test
 	public void testGetSuccess() {
 		System.out.println("GET");
@@ -109,7 +120,10 @@ public class WebServiceTest {
 		}
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
-	
+
+	/**
+	 * Response 404 NOT_FOUND if get invalid id.
+	 */
 	@Test
 	public void testGetFail() {
 		System.out.println("GET");
@@ -123,6 +137,9 @@ public class WebServiceTest {
 				contentRes.getStatus());
 	}
 
+	/**
+	 * Response 200 OK if put success.
+	 */
 	@Test
 	public void testPutSuccess() {
 		System.out.println("PUT");
@@ -145,7 +162,10 @@ public class WebServiceTest {
 		}
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
-	
+
+	/**
+	 * Response 400 BAD_REQUEST if path's id != id in xml file.
+	 */
 	@Test
 	public void testPutFail() {
 		System.out.println("PUT");
@@ -166,9 +186,13 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), contentRes.getStatus());
+		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),
+				contentRes.getStatus());
 	}
 
+	/**
+	 * Response 200 OK if delete success.
+	 */
 	@Test
 	public void testDeleteSuccess() {
 		System.out.println("DELETE");
@@ -184,6 +208,9 @@ public class WebServiceTest {
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
+	/**
+	 * Response 200 OK if delete fail.
+	 */
 	@Test
 	public void testDeleteFail() {
 		System.out.println("DELETE");

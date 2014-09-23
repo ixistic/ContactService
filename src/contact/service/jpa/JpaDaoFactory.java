@@ -17,11 +17,11 @@ import contact.service.mem.MemContactDao;
  * 
  * @see contact.service.DaoFactory
  * @version 2014.09.19
- * @author jim
+ * @author jim, Veerapat Threeravipark 5510547022
  */
 public class JpaDaoFactory extends DaoFactory {
 	private static final String PERSISTENCE_UNIT = "contacts";
-	/** instance of the entity DAO */
+	private static JpaDaoFactory factory;
 	private ContactDao contactDao;
 	private final EntityManagerFactory emf;
 	private EntityManager em;
@@ -37,6 +37,17 @@ public class JpaDaoFactory extends DaoFactory {
 		contactDao = new JpaContactDao( em );
 	}
 	
+	/**
+	 * Get the instance of DaoFactory.
+	 * @return instance of DaoFactory.
+	 */
+	public static JpaDaoFactory getInstance() {
+		if ( factory == null ) {
+			factory = new JpaDaoFactory();
+		}
+		return factory;
+	}
+	
 	@Override
 	public ContactDao getContactDao() {
 		return contactDao;
@@ -48,6 +59,7 @@ public class JpaDaoFactory extends DaoFactory {
 			if (em != null && em.isOpen()) em.close();
 			if (emf != null && emf.isOpen()) emf.close();
 		} catch (IllegalStateException ex) {
+			// SEVERE - highest
 			logger.log( Level.SEVERE, ex.toString() );
 		}
 	}

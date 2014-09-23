@@ -27,7 +27,7 @@ import contact.service.jpa.JpaDaoFactory;
  * TODO for reliable test we need a way to completely wipe clean the database.
  * But the current ContactDao interface doesn't have a "removeAll" method.
  * 
- * @author jim
+ * @author jim, Veerapat Threeravipark 5510547022
  *
  */
 public class JpaContactDaoTest {
