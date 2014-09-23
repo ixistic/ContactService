@@ -49,7 +49,7 @@ public class MemDaoFactory extends DaoFactory {
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}
-			File outputFile = new File("/tmp/ContactService.xml");
+			File outputFile = new File("ContactService.xml");
 			System.out.println("Output file status: "+outputFile.isFile() +" --> Path: " +outputFile.getPath());
 			Marshaller marshaller = null;
 			try {

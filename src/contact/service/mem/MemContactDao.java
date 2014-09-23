@@ -28,8 +28,9 @@ public class MemContactDao implements ContactDao {
 
 	public MemContactDao() {
 		contacts = new ArrayList<Contact>();
-		Contacts contactsList = importFile("/tmp/ContactService.xml");
-		contacts = contactsList.getContacts();
+		Contacts contactsList = importFile("ContactService.xml");
+		if(contactsList != null)
+			contacts = contactsList.getContacts();
 		nextId = new AtomicLong(1000L);
 //		createTestContact(1);
 	}
