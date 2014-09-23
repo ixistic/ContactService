@@ -25,7 +25,6 @@ import contact.service.ContactDao;
 import contact.service.DaoFactory;
 import contact.service.mem.MemDaoFactory;
 
-
 /**
  * ContactResource provides RESTful web resources using JAX-RS annotations to
  * map requests to request handling code, and to inject resources into code.
@@ -59,7 +58,7 @@ public class ContactResource {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getContact(@QueryParam("q") String query) {
+	public Response getContact(@QueryParam("title") String query) {
 		GenericEntity<List<Contact>> ge = null;
 		if (query != null) {
 			ge = convertListToGE(dao.findByTitle(query));

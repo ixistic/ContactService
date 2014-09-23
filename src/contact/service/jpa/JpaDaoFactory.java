@@ -1,5 +1,6 @@
 package contact.service.jpa;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -47,7 +48,7 @@ public class JpaDaoFactory extends DaoFactory {
 			if (em != null && em.isOpen()) em.close();
 			if (emf != null && emf.isOpen()) emf.close();
 		} catch (IllegalStateException ex) {
-			//TODO log it
+			logger.log( Level.SEVERE, ex.toString() );
 		}
 	}
 }
