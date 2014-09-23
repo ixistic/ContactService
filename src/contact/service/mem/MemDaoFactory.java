@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import contact.entity.Contact;
+import contact.entity.Contacts;
 import contact.service.ContactDao;
 import contact.service.DaoFactory;
 

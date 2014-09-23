@@ -1,4 +1,4 @@
-package contact.service.mem;
+package contact.entity;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import contact.entity.Contact;
 
 @XmlRootElement(name="contacts")
 @XmlAccessorType(XmlAccessType.FIELD)

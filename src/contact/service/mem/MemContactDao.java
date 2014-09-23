@@ -1,12 +1,19 @@
 package contact.service.mem;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import contact.entity.Contact;
-import contact.service.ContactDao;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
+import contact.entity.Contact;
+import contact.entity.Contacts;
+import contact.service.ContactDao;
 
 /**
  * Data access object for saving and retrieving contacts. This DAO uses an
@@ -15,14 +22,32 @@ import contact.service.ContactDao;
  * 
  * @author jim, Veerapat Threeravipark 5510547022
  */
-public class MemContactDao implements ContactDao{
+public class MemContactDao implements ContactDao {
 	private List<Contact> contacts;
 	private AtomicLong nextId;
 
 	public MemContactDao() {
 		contacts = new ArrayList<Contact>();
+		Contacts contactsList = importFile("/tmp/ContactService.xml");
+		contacts = contactsList.getContacts();
 		nextId = new AtomicLong(1000L);
-		createTestContact(1);
+//		createTestContact(1);
+	}
+
+	public Contacts importFile(String path) {
+		JAXBContext ctx;
+		Object obj = null;
+		try {
+			ctx = JAXBContext.newInstance(Contacts.class);
+			Unmarshaller unmarshaller;
+			unmarshaller = ctx.createUnmarshaller();
+			File file = new File(path);
+			obj = unmarshaller.unmarshal(file);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		Contacts contacts = (Contacts) obj;
+		return contacts;
 	}
 
 	/** add a single contact with given id for testing. */
