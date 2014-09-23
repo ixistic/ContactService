@@ -8,12 +8,12 @@ import contact.service.DaoFactory;
  * This enables you to change the implementation of the actual ContactDao
  * without changing the rest of your application.
  * 
- * @author jim
+ * @author jim, Veerapat Threeravipark 5510547022
  */
-public class MemDaoFactory {
+public class MemDaoFactory extends DaoFactory{
 	// singleton instance of this factory
 	private static MemDaoFactory factory;
-	private MemContactDao daoInstance;
+	private ContactDao daoInstance;
 	
 	private MemDaoFactory() {
 		daoInstance = new MemContactDao();
@@ -24,7 +24,12 @@ public class MemDaoFactory {
 		return factory;
 	}
 	
-	public MemContactDao getContactDao() {
+	public ContactDao getContactDao() {
 		return daoInstance;
+	}
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
+		
 	}
 }

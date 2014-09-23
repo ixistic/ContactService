@@ -23,6 +23,7 @@ import javax.xml.bind.JAXBElement;
 import contact.entity.Contact;
 import contact.service.ContactDao;
 import contact.service.DaoFactory;
+import contact.service.mem.MemDaoFactory;
 
 
 /**
@@ -43,7 +44,7 @@ public class ContactResource {
 	 * Construct ContactDao from DaoFactory.
 	 */
 	public ContactResource() {
-		dao = DaoFactory.getInstance().getContactDao();
+		dao = MemDaoFactory.getInstance().getContactDao();
 		System.out.println("Initial ContactDao.");
 	}
 

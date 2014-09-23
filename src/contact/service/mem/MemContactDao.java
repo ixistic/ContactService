@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import contact.entity.Contact;
+import contact.service.ContactDao;
 
 
 /**
@@ -14,7 +15,7 @@ import contact.entity.Contact;
  * 
  * @author jim, Veerapat Threeravipark 5510547022
  */
-public class MemContactDao {
+public class MemContactDao implements ContactDao{
 	private List<Contact> contacts;
 	private AtomicLong nextId;
 
