@@ -111,6 +111,7 @@ public class JettyMain {
 	public static void stopServer() {
 		System.out.println("Stopping server.");
 		DaoFactory.getInstance().shutdown();
+		System.out.println("Shutted down.");
 		try {
 			server.stop();
 		} catch (Exception e) {

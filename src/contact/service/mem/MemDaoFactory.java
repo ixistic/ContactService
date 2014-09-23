@@ -42,15 +42,25 @@ public class MemDaoFactory extends DaoFactory {
 		List<Contact> contacts = daoInstance.findAll();
 		Contacts allContacts = new Contacts();
 		allContacts.setContacts(contacts);
-
-		try {
-			JAXBContext context = JAXBContext.newInstance(Contacts.class);
-			File outputFile = new File("/backup/ContactService.xml");
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.marshal(allContacts, outputFile);
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
+			JAXBContext context = null;
+			try {
+				context = JAXBContext.newInstance(Contacts.class);
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+			File outputFile = new File("/tmp/ContactService.xml");
+			System.out.println("Output file status: "+outputFile.isFile() +" --> Path: " +outputFile.getPath());
+			Marshaller marshaller = null;
+			try {
+				marshaller = context.createMarshaller();
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+			try {
+				marshaller.marshal(allContacts, outputFile);
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
 
 	}
 }

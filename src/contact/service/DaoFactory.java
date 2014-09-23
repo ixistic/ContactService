@@ -1,5 +1,7 @@
 package contact.service;
 
+import contact.service.mem.MemDaoFactory;
+
 
 /**
  * DaoFactory defines methods for obtaining instance of data access objects.
@@ -28,7 +30,7 @@ public abstract class DaoFactory {
 	 * @return instance of a concrete DaoFactory
 	 */
 	public static DaoFactory getInstance() {
-		if (factory == null) factory = new contact.service.jpa.JpaDaoFactory();
+		if (factory == null) factory = MemDaoFactory.getInstance();
 		return factory;
 	}
 	
