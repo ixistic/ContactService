@@ -158,4 +158,12 @@ public class JpaContactDao implements ContactDao {
 			return false;
 		}
 	}
+
+	@Override
+	public void removeAll() {
+		List<Contact> contacts = findAll();
+		for ( Contact contact : contacts ) {
+			delete( contact.getId() );
+		}
+	}
 }

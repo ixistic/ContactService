@@ -1,8 +1,7 @@
 package contact.service.mem;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -31,11 +30,10 @@ public class MemContactDao implements ContactDao {
 	 */
 	public MemContactDao() {
 		contacts = new ArrayList<Contact>();
-		Contacts contactsList = importFile("ContactService.xml");
-		if (contactsList != null)
-			contacts = contactsList.getContacts();
+//		Contacts contactsList = importFile("ContactService.xml");
+//		contacts = contactsList.getContacts();
 		nextId = new AtomicLong(1000L);
-		// createTestContact(1);
+//		createTestContact(1);
 	}
 
 	/**
@@ -183,6 +181,14 @@ public class MemContactDao implements ContactDao {
 			id = nextId.getAndAdd(1L);
 		}
 		return id; // this should never happen
+	}
+
+	@Override
+	public void removeAll() {
+		List<Contact> contacts = findAll();
+		for ( Contact contact : contacts ) {
+			delete( contact.getId() );
+		}
 	}
 
 }

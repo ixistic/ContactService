@@ -68,5 +68,9 @@ public interface ContactDao {
 	 */
 	public abstract boolean update(Contact update);
 
+	/**
+	 * Remove all contacts from the database.
+	 */
+	public abstract void removeAll();
 
 }

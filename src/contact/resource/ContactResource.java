@@ -84,7 +84,6 @@ public class ContactResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getContactById(@PathParam("id") String id) {
-		// if(id != null){
 		Contact contact = dao.find(Long.parseLong(id));
 		if (contact != null) {
 			return Response.ok(contact).build();

@@ -59,10 +59,6 @@ public class MemDaoFactory extends DaoFactory {
 			Marshaller marshaller = null;
 			try {
 				marshaller = context.createMarshaller();
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
-			try {
 				marshaller.marshal(allContacts, outputFile);
 			} catch (JAXBException e) {
 				e.printStackTrace();
