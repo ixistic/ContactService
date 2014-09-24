@@ -30,7 +30,7 @@ public class WebServiceTest {
 	private static String serviceUrl;
 	private static HttpClient client;
 	private static final String TEST_ID = "123456";
-	private static ContactDao dao = DaoFactory.getInstance().getContactDao();
+	private static ContactDao dao;
 
 	@BeforeClass
 	public static void doFirst() {
@@ -40,6 +40,7 @@ public class WebServiceTest {
 		try {
 			String url = JettyMain.startServer(8080);
 			serviceUrl = url + "contacts/";
+			dao = DaoFactory.getInstance().getContactDao();
 			dao.removeAll();
 			client = new HttpClient();
 			client.start();

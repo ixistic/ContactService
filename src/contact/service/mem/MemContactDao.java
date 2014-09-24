@@ -1,7 +1,6 @@
 package contact.service.mem;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -40,17 +39,15 @@ public class MemContactDao implements ContactDao {
 	 */
 	public void importFile() {
 		JAXBContext ctx;
-		Contacts contactList = new Contacts();
 		try {
 			ctx = JAXBContext.newInstance(Contacts.class);
 			Unmarshaller unmarshaller;
 			unmarshaller = ctx.createUnmarshaller();
-			File file = new File("ContactService.xml");
-			contactList = (Contacts) unmarshaller.unmarshal(file);
-			if ( contactList.getContacts() == null ) {
+			File file = new File(MemDaoFactory.PATH);
+			Contacts contactList = (Contacts) unmarshaller.unmarshal(file);
+			if (contactList.getContacts() == null ) {
 				return;
 			}
-			System.out.println(contactList.getContacts().size());
 			contacts = contactList.getContacts();
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -184,13 +181,8 @@ public class MemContactDao implements ContactDao {
 		return id; // this should never happen
 	}
 
-	@Override
 	public void removeAll() {
-		List<Contact> contacts = findAll();
-		System.out.println("ice"+contacts.size());
-		for ( Contact contact : contacts ) {
-			delete( contact.getId() );
-		}
+		contacts = new ArrayList<Contact>();
 	}
 
 }

@@ -83,6 +83,7 @@ public class JettyMain {
 	 */
 	public static void main(String[] args) throws Exception {
 		startServer(PORT);
+		System.out.println("Server started.  Press ENTER to stop it.");
 		int ch = System.in.read();
 		stopServer();
 	}

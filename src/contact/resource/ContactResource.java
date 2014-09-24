@@ -43,7 +43,7 @@ public class ContactResource {
 	 * Construct ContactDao from DaoFactory.
 	 */
 	public ContactResource() {
-		dao = MemDaoFactory.getInstance().getContactDao();
+		dao = DaoFactory.getInstance().getContactDao();
 		System.out.println("Initial ContactDao.");
 	}
 

@@ -23,6 +23,7 @@ public class MemDaoFactory extends DaoFactory {
 	// singleton instance of this factory
 	private static MemDaoFactory factory;
 	private ContactDao daoInstance;
+	public static final String PATH = "ContactService.xml";
 
 	private MemDaoFactory() {
 		daoInstance = new MemContactDao();
@@ -30,6 +31,7 @@ public class MemDaoFactory extends DaoFactory {
 
 	/**
 	 * Get the instance of DaoFactory.
+	 * 
 	 * @return instance of DaoFactory.
 	 */
 	public static MemDaoFactory getInstance() {
@@ -48,21 +50,22 @@ public class MemDaoFactory extends DaoFactory {
 		List<Contact> contacts = daoInstance.findAll();
 		Contacts allContacts = new Contacts();
 		allContacts.setContacts(contacts);
-			JAXBContext context = null;
-			try {
-				context = JAXBContext.newInstance(Contacts.class);
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
-			File outputFile = new File("ContactService.xml");
-			System.out.println("Output file status: "+outputFile.isFile() +" --> Path: " +outputFile.getPath());
-			Marshaller marshaller = null;
-			try {
-				marshaller = context.createMarshaller();
-				marshaller.marshal(allContacts, outputFile);
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
+		JAXBContext context = null;
+		try {
+			context = JAXBContext.newInstance(Contacts.class);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		File outputFile = new File(PATH);
+		System.out.println("Output file status: " + outputFile.isFile()
+				+ " --> Path: " + outputFile.getPath());
+		Marshaller marshaller = null;
+		try {
+			marshaller = context.createMarshaller();
+			marshaller.marshal(allContacts, outputFile);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 
 	}
 }

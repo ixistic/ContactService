@@ -74,7 +74,7 @@ public class JpaContactDaoTest {
 	public void testDelete() {
 		long id = foo.getId();
 		Assume.assumeTrue(id > 0);
-		// is foo still there?
+		System.out.println("ice"+id);
 		Contact fooAgain = contactDao.find(id);
 		Assume.assumeNotNull(fooAgain);
 
