@@ -29,14 +29,18 @@ import contact.server.JettyMain;
 public class WebServiceTest {
 	private static String serviceUrl;
 	private static HttpClient client;
+	private static final String TEST_ID = "123456";
+	private static ContactDao dao = DaoFactory.getInstance().getContactDao();
 
 	@BeforeClass
 	public static void doFirst() {
 		// Start the Jetty server.
 		// Suppose this method returns the URL (with port) of the server
+		System.out.println("Start test");
 		try {
 			String url = JettyMain.startServer(8080);
 			serviceUrl = url + "contacts/";
+			dao.removeAll();
 			client = new HttpClient();
 			client.start();
 		} catch (Exception e) {
@@ -60,9 +64,9 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPostSuccess() {
-		System.out.println("POST");
+		System.out.println("POST Success");
 		StringContentProvider content = new StringContentProvider(
-				"<contact id=\"110\">"
+				"<contact id=\""+TEST_ID+"\">"
 						+ "<title>contact nickname or title</title>"
 						+ "<name>contact's full name</name>"
 						+ "<email>contact's email address</email>"
@@ -76,7 +80,7 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		System.out.println(contentRes.getStatus());
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.CREATED.getStatusCode(),
 				contentRes.getStatus());
 	}
@@ -86,9 +90,9 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPostFail() {
-		System.out.println("POST");
+		System.out.println("POST Fail");
 		StringContentProvider content = new StringContentProvider(
-				"<contact id=\"110\">"
+				"<contact id=\""+TEST_ID+"\">"
 						+ "<title>contact nickname or title</title>"
 						+ "<name>contact's full name</name>"
 						+ "<email>contact's email address</email>"
@@ -102,6 +106,7 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.CONFLICT.getStatusCode(),
 				contentRes.getStatus());
 	}
@@ -111,13 +116,14 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testGetSuccess() {
-		System.out.println("GET");
+		System.out.println("GET Success");
 		ContentResponse contentRes = null;
 		try {
 			contentRes = client.GET(serviceUrl);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 		}
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
@@ -126,13 +132,14 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testGetFail() {
-		System.out.println("GET");
+		System.out.println("GET Fail");
 		ContentResponse contentRes = null;
 		try {
 			contentRes = client.GET(serviceUrl + "100000000");
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 		}
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
 				contentRes.getStatus());
 	}
@@ -142,12 +149,12 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPutSuccess() {
-		System.out.println("PUT");
-		String path = serviceUrl + "110";
+		System.out.println("PUT Success");
+		String path = serviceUrl + TEST_ID;
 		Request req = client.newRequest(path);
 		req = req.method(HttpMethod.PUT);
 		StringContentProvider content = new StringContentProvider(
-				"<contact id=\"110\">"
+				"<contact id=\""+TEST_ID+"\">"
 						+ "<title>contact nickname or title edited</title>"
 						+ "<name>contact's full name edited</name>"
 						+ "<email>contact's email address edited</email>"
@@ -160,6 +167,7 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
@@ -168,12 +176,12 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPutFail() {
-		System.out.println("PUT");
-		String path = serviceUrl + "110";
+		System.out.println("PUT Fail");
+		String path = serviceUrl + TEST_ID + "1";
 		Request req = client.newRequest(path);
 		req = req.method(HttpMethod.PUT);
 		StringContentProvider content = new StringContentProvider(
-				"<contact id=\"102\">"
+				"<contact id=\""+TEST_ID+"\">"
 						+ "<title>contact nickname or title edited</title>"
 						+ "<name>contact's full name edited</name>"
 						+ "<email>contact's email address edited</email>"
@@ -186,6 +194,7 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),
 				contentRes.getStatus());
 	}
@@ -195,8 +204,8 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testDeleteSuccess() {
-		System.out.println("DELETE");
-		String path = serviceUrl + "110";
+		System.out.println("DELETE Success");
+		String path = serviceUrl + TEST_ID;
 		Request req = client.newRequest(path);
 		req = req.method(HttpMethod.DELETE);
 		ContentResponse contentRes = null;
@@ -205,16 +214,17 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
+		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**
-	 * Response 200 OK if delete fail.
+	 * Response 405 METHOD_NOT_ALLOWED if wrong delete format.
 	 */
 	@Test
 	public void testDeleteFail() {
-		System.out.println("DELETE");
-		String path = serviceUrl + "1000000";
+		System.out.println("DELETE Fail");
+		String path = serviceUrl; // http://localhost:8080/contact/
 		Request req = client.newRequest(path);
 		req = req.method(HttpMethod.DELETE);
 		ContentResponse contentRes = null;
@@ -223,6 +233,8 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.METHOD_NOT_ALLOWED.getStatusCode(),
+				contentRes.getStatus());
 	}
 }

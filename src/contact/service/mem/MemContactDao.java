@@ -50,6 +50,7 @@ public class MemContactDao implements ContactDao {
 			if ( contactList.getContacts() == null ) {
 				return;
 			}
+			System.out.println(contactList.getContacts().size());
 			contacts = contactList.getContacts();
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -186,6 +187,7 @@ public class MemContactDao implements ContactDao {
 	@Override
 	public void removeAll() {
 		List<Contact> contacts = findAll();
+		System.out.println("ice"+contacts.size());
 		for ( Contact contact : contacts ) {
 			delete( contact.getId() );
 		}
