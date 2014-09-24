@@ -30,31 +30,31 @@ public class MemContactDao implements ContactDao {
 	 */
 	public MemContactDao() {
 		contacts = new ArrayList<Contact>();
-//		Contacts contactsList = importFile("ContactService.xml");
-//		contacts = contactsList.getContacts();
+		importFile();
 		nextId = new AtomicLong(1000L);
 //		createTestContact(1);
 	}
 
 	/**
 	 * Import list of contact from xml source file.
-	 * @param path path of file
-	 * @return contacts that list of contact
 	 */
-	public Contacts importFile(String path) {
+	public void importFile() {
 		JAXBContext ctx;
-		Object obj = null;
+		Contacts contactList = new Contacts();
 		try {
 			ctx = JAXBContext.newInstance(Contacts.class);
 			Unmarshaller unmarshaller;
 			unmarshaller = ctx.createUnmarshaller();
-			File file = new File(path);
-			obj = unmarshaller.unmarshal(file);
+			File file = new File("ContactService.xml");
+			contactList = (Contacts) unmarshaller.unmarshal(file);
+			if ( contactList.getContacts() == null ) {
+				return;
+			}
+			contacts = contactList.getContacts();
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
-		Contacts contacts = (Contacts) obj;
-		return contacts;
+	
 	}
 
 	/** 
