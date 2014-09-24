@@ -1,16 +1,19 @@
 package contact.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import contact.entity.Contact;
 import contact.server.JettyMain;
-import contact.service.ContactDao;
 import contact.service.jpa.JpaDaoFactory;
 
 /**
@@ -52,11 +55,11 @@ public class JpaContactDaoTest {
 	@Before
 	public void setUp() {
 		contactDao = (new JpaDaoFactory()).getContactDao();
+		foo = new Contact("foo title", "Foo Bar", "foo@bar.com", "0812345678");
 	}
 
 	@Test
 	public void testSaveAndFind() {
-		foo = new Contact("foo title", "Foo Bar", "foo@bar.com", "0812345678");
 		assertTrue(contactDao.save(foo));
 		assertTrue(foo.getId() > 0);
 		System.out.println("Saved foo and got foo.id = " + foo.getId());
@@ -64,22 +67,21 @@ public class JpaContactDaoTest {
 		// Now find it again
 		Contact fooAgain = contactDao.find(foo.getId());
 		assertNotNull(fooAgain);
-		assertSame("DAO should return the same object reference", foo, fooAgain); // foo
-																					// ==
-																					// fooAgain
+		assertSame("DAO should return the same object reference", foo, fooAgain);
 	}
 
 	// this test requires that testSaveAndFind be performed first
+	// Answer : Can't order it should add again.
 	@Test
 	public void testDelete() {
 		long id = foo.getId();
 		Assume.assumeTrue(id > 0);
-		System.out.println("ice"+id);
 		Contact fooAgain = contactDao.find(id);
 		Assume.assumeNotNull(fooAgain);
 
 		assertTrue(contactDao.delete(id));
 		assertEquals("after deleting the id should be zero", 0L, foo.getId());
 	}
+
 
 }
