@@ -7,11 +7,15 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
+import org.eclipse.persistence.descriptors.invalidation.DailyCacheInvalidationPolicy;
 
 import contact.entity.Contact;
 import contact.entity.Contacts;
 import contact.service.ContactDao;
+import contact.service.DaoFactory;
 
 /**
  * Data access object for saving and retrieving contacts. This DAO uses an
@@ -31,13 +35,14 @@ public class MemContactDao implements ContactDao {
 		contacts = new ArrayList<Contact>();
 		importFile();
 		nextId = new AtomicLong(1000L);
-//		createTestContact(1);
+		// createTestContact(1);
 	}
 
 	/**
 	 * Import list of contact from xml source file.
 	 */
 	public void importFile() {
+		checkFile();
 		JAXBContext ctx;
 		try {
 			ctx = JAXBContext.newInstance(Contacts.class);
@@ -45,17 +50,36 @@ public class MemContactDao implements ContactDao {
 			unmarshaller = ctx.createUnmarshaller();
 			File file = new File(MemDaoFactory.PATH);
 			Contacts contactList = (Contacts) unmarshaller.unmarshal(file);
-			if (contactList.getContacts() == null ) {
+			if (contactList.getContacts() == null) {
 				return;
 			}
 			contacts = contactList.getContacts();
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
-	
+
 	}
 
-	/** 
+	private void checkFile() {
+		File file = new File(MemDaoFactory.PATH);
+		if (!file.exists()) {
+			try {
+				Contacts contacts = new Contacts();
+				JAXBContext context = JAXBContext.newInstance(Contacts.class);
+				File outputFile = new File(MemDaoFactory.PATH);
+				System.out.println("Created new file -> Path: "
+						+ outputFile.getPath());
+				Marshaller marshaller = null;
+				marshaller = context.createMarshaller();
+				marshaller.marshal(contacts, outputFile);
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
 	 * Add a single contact with given id for testing.
 	 */
 	private void createTestContact(long id) {

@@ -53,14 +53,10 @@ public class MemDaoFactory extends DaoFactory {
 		JAXBContext context = null;
 		try {
 			context = JAXBContext.newInstance(Contacts.class);
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-		File outputFile = new File(PATH);
-		System.out.println("Output file status: " + outputFile.isFile()
-				+ " --> Path: " + outputFile.getPath());
-		Marshaller marshaller = null;
-		try {
+			File outputFile = new File(PATH);
+			System.out.println("Output file status: " + outputFile.isFile()
+					+ " --> Path: " + outputFile.getPath());
+			Marshaller marshaller = null;
 			marshaller = context.createMarshaller();
 			marshaller.marshal(allContacts, outputFile);
 		} catch (JAXBException e) {
