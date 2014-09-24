@@ -1,13 +1,11 @@
 package contact.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import javax.ws.rs.core.Response;
-
-import junit.framework.Assert;
 
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
@@ -29,7 +27,7 @@ import contact.server.JettyMain;
 public class WebServiceTest {
 	private static String serviceUrl;
 	private static HttpClient client;
-	private static ContactDao dao;
+	private static ContactDao contactDao;
 
 	@BeforeClass
 	public static void doFirst() {
@@ -39,8 +37,8 @@ public class WebServiceTest {
 		try {
 			String url = JettyMain.startServer(8080);
 			serviceUrl = url + "contacts/";
-			dao = DaoFactory.getInstance().getContactDao();
-			dao.removeAll();
+			contactDao = DaoFactory.getInstance().getContactDao();
+			contactDao.removeAll();
 			client = new HttpClient();
 			client.start();
 		} catch (Exception e) {
@@ -130,7 +128,7 @@ public class WebServiceTest {
 		ContentResponse contentRes;
 		long testId = 1122245;
 		post(testId);
-		contentRes = put(testId,testId);
+		contentRes = put(testId, testId);
 		delete(testId);
 		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
@@ -145,7 +143,7 @@ public class WebServiceTest {
 		ContentResponse contentRes;
 		long testId = 177445;
 		post(testId);
-		contentRes = put(testId,1113333);
+		contentRes = put(testId, 1113333);
 		delete(testId);
 		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),
@@ -176,11 +174,18 @@ public class WebServiceTest {
 		long testId = 198885;
 		post(testId);
 		contentRes = delete(33333);
+		delete(198885);
 		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(),
-				contentRes.getStatus());
+		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
+	/**
+	 * Get a contact by id.
+	 * 
+	 * @param id
+	 *            identifier of contact
+	 * @return contentResponse
+	 */
 	public ContentResponse get(long id) {
 		ContentResponse contentRes = null;
 		try {
@@ -194,6 +199,10 @@ public class WebServiceTest {
 	/**
 	 * Create a new contact. If contact id is omitted or 0, the server will
 	 * assign a unique ID and return it as the Location header.
+	 * 
+	 * @param id
+	 *            identifier of contact
+	 * @return contentResponse
 	 */
 	public ContentResponse post(long id) {
 		StringContentProvider content = new StringContentProvider(
@@ -216,6 +225,15 @@ public class WebServiceTest {
 		return contentRes;
 	}
 
+	/**
+	 * Update a contact. Only update the attributes supplied in request body.
+	 * 
+	 * @param id
+	 *            identifier of contact
+	 * @param idInXml
+	 *            identifier of contact in xml
+	 * @return contentResponse
+	 */
 	public ContentResponse put(long id, long idInXml) {
 		String path = serviceUrl + id;
 		Request req = client.newRequest(path);
@@ -239,6 +257,13 @@ public class WebServiceTest {
 		return contentRes;
 	}
 
+	/**
+	 * Delete a contact with matching id.
+	 * 
+	 * @param id
+	 *            identifier of contact
+	 * @return contentResponse
+	 */
 	public ContentResponse delete(long id) {
 		String path = serviceUrl + id;
 		Request req = client.newRequest(path);
