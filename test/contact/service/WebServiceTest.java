@@ -29,7 +29,6 @@ import contact.server.JettyMain;
 public class WebServiceTest {
 	private static String serviceUrl;
 	private static HttpClient client;
-	private static final String TEST_ID = "123456";
 	private static ContactDao dao;
 
 	@BeforeClass
@@ -66,21 +65,10 @@ public class WebServiceTest {
 	@Test
 	public void testPostSuccess() {
 		System.out.println("POST Success");
-		StringContentProvider content = new StringContentProvider(
-				"<contact id=\""+TEST_ID+"\">"
-						+ "<title>contact nickname or title</title>"
-						+ "<name>contact's full name</name>"
-						+ "<email>contact's email address</email>"
-						+ "<phoneNumber>contact's telephone number</phoneNumber>"
-						+ "</contact>");
-		ContentResponse contentRes = null;
-		try {
-			contentRes = client.newRequest(serviceUrl)
-					.content(content, "application/xml")
-					.method(HttpMethod.POST).send();
-		} catch (InterruptedException | TimeoutException | ExecutionException e) {
-			e.printStackTrace();
-		}
+		ContentResponse contentRes;
+		long testId = 123456;
+		contentRes = post(testId);
+		delete(testId);
 		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.CREATED.getStatusCode(),
 				contentRes.getStatus());
@@ -92,8 +80,126 @@ public class WebServiceTest {
 	@Test
 	public void testPostFail() {
 		System.out.println("POST Fail");
+		ContentResponse contentRes;
+		long testId = 115000;
+		post(testId);
+		contentRes = post(testId);
+		delete(testId);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.CONFLICT.getStatusCode(),
+				contentRes.getStatus());
+	}
+
+	/**
+	 * Response 200 OK if get success.
+	 */
+	@Test
+	public void testGetSuccess() {
+		System.out.println("GET Success");
+		ContentResponse contentRes;
+		long testId = 115333;
+		post(testId);
+		contentRes = get(testId);
+		delete(testId);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+	}
+
+	/**
+	 * Response 404 NOT_FOUND if get invalid id.
+	 */
+	@Test
+	public void testGetFail() {
+		System.out.println("GET Fail");
+		ContentResponse contentRes;
+		long testId = 115445;
+		post(testId);
+		contentRes = get(111233);
+		delete(testId);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
+				contentRes.getStatus());
+	}
+
+	/**
+	 * Response 200 OK if put success.
+	 */
+	@Test
+	public void testPutSuccess() {
+		System.out.println("PUT Success");
+		ContentResponse contentRes;
+		long testId = 1122245;
+		post(testId);
+		contentRes = put(testId,testId);
+		delete(testId);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+	}
+
+	/**
+	 * Response 400 BAD_REQUEST if path's id != id in xml file.
+	 */
+	@Test
+	public void testPutFail() {
+		System.out.println("PUT Fail");
+		ContentResponse contentRes;
+		long testId = 177445;
+		post(testId);
+		contentRes = put(testId,1113333);
+		delete(testId);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),
+				contentRes.getStatus());
+	}
+
+	/**
+	 * Response 200 OK if delete success.
+	 */
+	@Test
+	public void testDeleteSuccess() {
+		System.out.println("DELETE Success");
+		ContentResponse contentRes;
+		long testId = 19995;
+		post(testId);
+		contentRes = delete(testId);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+	}
+
+	/**
+	 * Response 200 OK if delete fail.
+	 */
+	@Test
+	public void testDeleteFail() {
+		System.out.println("DELETE Fail");
+		ContentResponse contentRes;
+		long testId = 198885;
+		post(testId);
+		contentRes = delete(33333);
+		System.out.println("result = " + contentRes.getStatus());
+		assertEquals(Response.Status.OK.getStatusCode(),
+				contentRes.getStatus());
+	}
+
+	public ContentResponse get(long id) {
+		ContentResponse contentRes = null;
+		try {
+			contentRes = client.GET(serviceUrl + id);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+		}
+		return contentRes;
+	}
+
+	/**
+	 * Create a new contact. If contact id is omitted or 0, the server will
+	 * assign a unique ID and return it as the Location header.
+	 */
+	public ContentResponse post(long id) {
 		StringContentProvider content = new StringContentProvider(
-				"<contact id=\""+TEST_ID+"\">"
+				"<contact id=\""
+						+ id
+						+ "\">"
 						+ "<title>contact nickname or title</title>"
 						+ "<name>contact's full name</name>"
 						+ "<email>contact's email address</email>"
@@ -107,55 +213,17 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.CONFLICT.getStatusCode(),
-				contentRes.getStatus());
+		return contentRes;
 	}
 
-	/**
-	 * Response 200 OK if get success.
-	 */
-	@Test
-	public void testGetSuccess() {
-		System.out.println("GET Success");
-		ContentResponse contentRes = null;
-		try {
-			contentRes = client.GET(serviceUrl);
-		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			e.printStackTrace();
-		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
-	}
-
-	/**
-	 * Response 404 NOT_FOUND if get invalid id.
-	 */
-	@Test
-	public void testGetFail() {
-		System.out.println("GET Fail");
-		ContentResponse contentRes = null;
-		try {
-			contentRes = client.GET(serviceUrl + "100000000");
-		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			e.printStackTrace();
-		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
-				contentRes.getStatus());
-	}
-
-	/**
-	 * Response 200 OK if put success.
-	 */
-	@Test
-	public void testPutSuccess() {
-		System.out.println("PUT Success");
-		String path = serviceUrl + TEST_ID;
+	public ContentResponse put(long id, long idInXml) {
+		String path = serviceUrl + id;
 		Request req = client.newRequest(path);
 		req = req.method(HttpMethod.PUT);
 		StringContentProvider content = new StringContentProvider(
-				"<contact id=\""+TEST_ID+"\">"
+				"<contact id=\""
+						+ idInXml
+						+ "\">"
 						+ "<title>contact nickname or title edited</title>"
 						+ "<name>contact's full name edited</name>"
 						+ "<email>contact's email address edited</email>"
@@ -168,45 +236,11 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		return contentRes;
 	}
 
-	/**
-	 * Response 400 BAD_REQUEST if path's id != id in xml file.
-	 */
-	@Test
-	public void testPutFail() {
-		System.out.println("PUT Fail");
-		String path = serviceUrl + TEST_ID + "1";
-		Request req = client.newRequest(path);
-		req = req.method(HttpMethod.PUT);
-		StringContentProvider content = new StringContentProvider(
-				"<contact id=\""+TEST_ID+"\">"
-						+ "<title>contact nickname or title edited</title>"
-						+ "<name>contact's full name edited</name>"
-						+ "<email>contact's email address edited</email>"
-						+ "<phoneNumber>contact's telephone number edited</phoneNumber>"
-						+ "</contact>");
-		req = req.content(content, "application/xml");
-		ContentResponse contentRes = null;
-		try {
-			contentRes = req.send();
-		} catch (InterruptedException | TimeoutException | ExecutionException e) {
-			e.printStackTrace();
-		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),
-				contentRes.getStatus());
-	}
-
-	/**
-	 * Response 200 OK if delete success.
-	 */
-	@Test
-	public void testDeleteSuccess() {
-		System.out.println("DELETE Success");
-		String path = serviceUrl + TEST_ID;
+	public ContentResponse delete(long id) {
+		String path = serviceUrl + id;
 		Request req = client.newRequest(path);
 		req = req.method(HttpMethod.DELETE);
 		ContentResponse contentRes = null;
@@ -215,27 +249,6 @@ public class WebServiceTest {
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
-	}
-
-	/**
-	 * Response 405 METHOD_NOT_ALLOWED if wrong delete format.
-	 */
-	@Test
-	public void testDeleteFail() {
-		System.out.println("DELETE Fail");
-		String path = serviceUrl; // http://localhost:8080/contact/
-		Request req = client.newRequest(path);
-		req = req.method(HttpMethod.DELETE);
-		ContentResponse contentRes = null;
-		try {
-			contentRes = req.send();
-		} catch (InterruptedException | TimeoutException | ExecutionException e) {
-			e.printStackTrace();
-		}
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.METHOD_NOT_ALLOWED.getStatusCode(),
-				contentRes.getStatus());
+		return contentRes;
 	}
 }
