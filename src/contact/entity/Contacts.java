@@ -27,12 +27,4 @@ public class Contacts {
 	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
-
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
-	
-
-
 }
