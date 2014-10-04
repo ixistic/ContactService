@@ -202,6 +202,7 @@ public class MemContactDao implements ContactDao {
 		return id; // this should never happen
 	}
 
+	@Override
 	public void removeAll() {
 		contacts = new ArrayList<Contact>();
 	}
