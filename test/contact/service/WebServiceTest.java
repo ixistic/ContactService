@@ -12,6 +12,7 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,20 +57,20 @@ public class WebServiceTest {
 		}
 		JettyMain.stopServer();
 	}
+	
+	@After
+	public void doAfterTest() {
+		contactDao.removeAll();
+	}
 
 	/**
 	 * Response 201 CREATED if post success.
 	 */
 	@Test
 	public void testPostSuccess() {
-		System.out.println("POST Success");
-		ContentResponse contentRes;
 		long testId = 123456;
-		contentRes = post(testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.CREATED.getStatusCode(),
-				contentRes.getStatus());
+		ContentResponse contentRes = post(testId);
+		assertEquals("Should response with 200 OK.",Response.Status.CREATED.getStatusCode(),contentRes.getStatus());
 	}
 
 	/**
@@ -77,15 +78,10 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPostFail() {
-		System.out.println("POST Fail");
-		ContentResponse contentRes;
 		long testId = 115000;
 		post(testId);
-		contentRes = post(testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.CONFLICT.getStatusCode(),
-				contentRes.getStatus());
+		ContentResponse contentRes = post(testId);
+		assertEquals("Should response with 409 Conflict if same contact id.",Response.Status.CONFLICT.getStatusCode(),contentRes.getStatus());
 	}
 
 	/**
@@ -93,14 +89,10 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testGetSuccess() {
-		System.out.println("GET Success");
-		ContentResponse contentRes;
 		long testId = 115333;
 		post(testId);
-		contentRes = get(testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		ContentResponse contentRes = get(testId);
+		assertEquals("Should response with 200 OK.",Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**
@@ -108,15 +100,10 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testGetFail() {
-		System.out.println("GET Fail");
-		ContentResponse contentRes;
 		long testId = 115445;
 		post(testId);
-		contentRes = get(111233);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
-				contentRes.getStatus());
+		ContentResponse contentRes = get(111233);
+		assertEquals("Should response with 404 NOT_FOUND if get invalid id.",Response.Status.NOT_FOUND.getStatusCode(),contentRes.getStatus());
 	}
 
 	/**
@@ -124,14 +111,10 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPutSuccess() {
-		System.out.println("PUT Success");
-		ContentResponse contentRes;
 		long testId = 1122245;
 		post(testId);
-		contentRes = put(testId, testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		ContentResponse contentRes = put(testId, testId);
+		assertEquals("Should response with 200 OK.",Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**
@@ -139,15 +122,10 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testPutFail() {
-		System.out.println("PUT Fail");
-		ContentResponse contentRes;
 		long testId = 177445;
 		post(testId);
-		contentRes = put(testId, 1113333);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),
-				contentRes.getStatus());
+		ContentResponse contentRes = put(testId, 1113333);
+		assertEquals("Should response with 400 BAD_REQUEST if path's id != id in xml file.",Response.Status.BAD_REQUEST.getStatusCode(),contentRes.getStatus());
 	}
 
 	/**
@@ -155,28 +133,21 @@ public class WebServiceTest {
 	 */
 	@Test
 	public void testDeleteSuccess() {
-		System.out.println("DELETE Success");
-		ContentResponse contentRes;
 		long testId = 19995;
 		post(testId);
-		contentRes = delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		ContentResponse contentRes = delete(testId);
+		assertEquals("Should response with 200 OK.",Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**
-	 * Response 200 OK if delete fail.
+	 * Response 404 NOT_FOUND if delete fail.
 	 */
 	@Test
 	public void testDeleteFail() {
-		System.out.println("DELETE Fail");
-		ContentResponse contentRes;
 		long testId = 198885;
 		post(testId);
-		contentRes = delete(33333);
-		delete(198885);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), contentRes.getStatus());
+		ContentResponse contentRes = delete(33333);
+		assertEquals("Should response with 404 NOT_FOUND if delete fail.",Response.Status.NOT_FOUND.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**
