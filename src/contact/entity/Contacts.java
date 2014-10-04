@@ -28,4 +28,11 @@ public class Contacts {
 		this.contacts = contacts;
 	}
 
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+	
+
+
 }
