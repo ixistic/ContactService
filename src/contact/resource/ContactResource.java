@@ -182,7 +182,7 @@ public class ContactResource {
 	 * 
 	 * @param id
 	 *            identifier of contact
-	 * @return response 200 OK if contact can delete or otherwise
+	 * @return response 200 OK if contact can delete, otherwise response 404 NOT FOUND
 	 */
 	@DELETE
 	@Path("{id}")
@@ -192,7 +192,7 @@ public class ContactResource {
 		if (contact == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-		EntityTag etag = new EntityTag(contact.hashCode() + "");
+		EntityTag etag = attachEtag(contact);
 		ResponseBuilder builder = request.evaluatePreconditions(etag);
 		if (builder == null) {
 			dao.delete(id);
@@ -223,7 +223,7 @@ public class ContactResource {
 	 * @return etag Entity tag of contact
 	 */
 	public EntityTag attachEtag(Contact contact) {
-		EntityTag etag = new EntityTag(Integer.toString(contact.hashCode()));
+		EntityTag etag = new EntityTag(contact.sha1());
 		return etag;
 	}
 }
