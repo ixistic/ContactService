@@ -59,9 +59,6 @@ public class EtagContactServiceTest {
 		contactDao.removeAll();
 	}
 
-	/**
-	 * 
-	 */
 	@Test
 	public void testEtagFromPost() {
 		ContentResponse contentRes;
@@ -73,9 +70,6 @@ public class EtagContactServiceTest {
 				Response.Status.CREATED.getStatusCode(), contentRes.getStatus());
 	}
 
-	/**
-	 * 
-	 */
 	@Test
 	public void testEtagfromGet() {
 		ContentResponse contentRes;
@@ -88,9 +82,6 @@ public class EtagContactServiceTest {
 				Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
-	/**
-	 * 
-	 */
 	@Test
 	public void testEtagfromGetNoneMatchTrue() {
 		ContentResponse contentRes;
@@ -107,9 +98,6 @@ public class EtagContactServiceTest {
 		}
 	}
 
-	/**
-	 * 
-	 */
 	@Test
 	public void testEtagfromGetNoneMatchFalse() {
 		ContentResponse contentRes;
@@ -132,9 +120,6 @@ public class EtagContactServiceTest {
 		}
 	}
 
-	/**
-	 * Response 200 OK if put success.
-	 */
 	@Test
 	public void testEtagFromPut() {
 		ContentResponse contentRes;
@@ -143,22 +128,104 @@ public class EtagContactServiceTest {
 		contentRes = put(testId, testId);
 		assertFalse("Etag shouldn't be empty.",
 				contentRes.getHeaders().get(HttpHeader.ETAG).isEmpty());
-		assertEquals("Should response with 201 created.",
+		assertEquals("Should response with 200 OK.",
 				Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
-	/**
-	 * Response 200 OK if delete success.
-	 */
 	@Test
-	public void testDeleteSuccess() {
-		System.out.println("DELETE Success");
+	public void testEtagFromPutMatchTrue() {
 		ContentResponse contentRes;
+		ContentResponse contentResGet;
+		long testId = 112223;
+		post(testId);
+		contentResGet = get(testId);
+		String path = serviceUrl + testId;
+		Request req = client.newRequest(path);
+		req = req.method(HttpMethod.PUT);
+		StringContentProvider content = new StringContentProvider(
+				"<contact id=\""
+						+ testId
+						+ "\">"
+						+ "<title>contact nickname or title edited</title>"
+						+ "<name>contact's full name edited</name>"
+						+ "<email>contact's email address edited</email>"
+						+ "<phoneNumber>contact's telephone number edited</phoneNumber>"
+						+ "</contact>");
+		req = req.content(content, "application/xml");
+		req = req.header(HttpHeader.IF_MATCH,
+				contentResGet.getHeaders().get(HttpHeader.ETAG));
+		try {
+			contentRes = req.send();
+			assertEquals("Should response with 200 OK.",
+					Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		} catch (InterruptedException | TimeoutException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testEtagFromPutMatchFalse() {
+		ContentResponse contentRes;
+		long testId = 112223;
+		post(testId);
+		String path = serviceUrl + testId;
+		Request req = client.newRequest(path);
+		req = req.method(HttpMethod.PUT);
+		StringContentProvider content = new StringContentProvider(
+				"<contact id=\""
+						+ testId
+						+ "\">"
+						+ "<title>contact nickname or title edited</title>"
+						+ "<name>contact's full name edited</name>"
+						+ "<email>contact's email address edited</email>"
+						+ "<phoneNumber>contact's telephone number edited</phoneNumber>"
+						+ "</contact>");
+		req = req.content(content, "application/xml");
+		req = req.header(HttpHeader.IF_MATCH, "\"testEtag\"");
+		try {
+			contentRes = req.send();
+			assertEquals("Should response with 412 Precondition Failed.",
+					Response.Status.PRECONDITION_FAILED.getStatusCode(),
+					contentRes.getStatus());
+		} catch (InterruptedException | TimeoutException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testEtagFromDeleteMatchTrue() {
+		ContentResponse contentRes;
+		ContentResponse contentResGet;
 		long testId = 19995;
 		post(testId);
-		contentRes = delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		contentResGet = get(testId);
+		try {
+			contentRes = client
+					.newRequest(serviceUrl + testId)
+					.header(HttpHeader.IF_MATCH,
+							contentResGet.getHeaders().get(HttpHeader.ETAG))
+					.method(HttpMethod.DELETE).send();
+			assertEquals(Response.Status.OK.getStatusCode(),
+					contentRes.getStatus());
+		} catch (InterruptedException | TimeoutException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testEtagFromDeleteMatchFalse() {
+		ContentResponse contentRes;
+		long testId = 1999445;
+		post(testId);
+		try {
+			contentRes = client.newRequest(serviceUrl + testId)
+					.header(HttpHeader.IF_MATCH, "\"testEtag\"")
+					.method(HttpMethod.DELETE).send();
+			assertEquals(Response.Status.PRECONDITION_FAILED.getStatusCode(),
+					contentRes.getStatus());
+		} catch (InterruptedException | TimeoutException | ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
