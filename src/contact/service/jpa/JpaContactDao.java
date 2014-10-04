@@ -87,8 +87,7 @@ public class JpaContactDao implements ContactDao {
 		// % is wildcard that matches anything
 		query.setParameter("title", "%" + titlestr.toLowerCase() + "%");
 		// now why bother to copy one list to another list?
-		java.util.List<Contact> result = Lists.newArrayList(query
-				.getResultList());
+		java.util.List<Contact> result = Lists.newArrayList(query.getResultList());
 		return result;
 	}
 

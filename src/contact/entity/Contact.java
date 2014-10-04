@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * A person is a contact with a name, title, and email. title is text to display
@@ -162,7 +161,8 @@ public class Contact implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		int result = (""+id+name+title+email+phoneNumber+photoUrl).hashCode();
+		return result;
 	}
 	
 

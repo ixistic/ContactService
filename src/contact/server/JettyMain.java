@@ -1,14 +1,8 @@
 package contact.server;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import javax.servlet.Servlet;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 
 import contact.service.DaoFactory;

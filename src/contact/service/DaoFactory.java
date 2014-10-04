@@ -1,6 +1,5 @@
 package contact.service;
 
-import contact.service.jpa.JpaDaoFactory;
 import contact.service.mem.MemDaoFactory;
 
 

@@ -176,7 +176,7 @@ public class WebServiceTest {
 		contentRes = delete(33333);
 		delete(198885);
 		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**

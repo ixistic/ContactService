@@ -10,12 +10,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.eclipse.persistence.descriptors.invalidation.DailyCacheInvalidationPolicy;
-
 import contact.entity.Contact;
 import contact.entity.Contacts;
 import contact.service.ContactDao;
-import contact.service.DaoFactory;
 
 /**
  * Data access object for saving and retrieving contacts. This DAO uses an

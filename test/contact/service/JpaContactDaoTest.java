@@ -10,7 +10,6 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import contact.entity.Contact;
 import contact.server.JettyMain;
@@ -32,13 +31,11 @@ import contact.service.jpa.JpaDaoFactory;
 public class JpaContactDaoTest {
 	private static ContactDao contactDao;
 	private Contact foo;
-	private static String url;
-
 	@BeforeClass
 	public static void doFirst() {
 		// this method is called before any tests and before the @Before method
 		try {
-			url = JettyMain.startServer(8080);
+			JettyMain.startServer(8080);
 			contactDao = DaoFactory.getInstance().getContactDao();
 			contactDao.removeAll();
 		} catch (Exception e) {

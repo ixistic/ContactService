@@ -1,6 +1,7 @@
 package contact.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -11,7 +12,9 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpMethod;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,49 +54,97 @@ public class EtagContactServiceTest {
 		JettyMain.stopServer();
 	}
 
-	/**
-	 * Response 201 CREATED if post success.
-	 */
-	@Test
-	public void testPostSuccess() {
-		System.out.println("POST Success");
-		ContentResponse contentRes;
-		long testId = 123456;
-		contentRes = post(testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.CREATED.getStatusCode(),
-				contentRes.getStatus());
+	@After
+	public void doAfterTest() {
+		contactDao.removeAll();
 	}
 
 	/**
-	 * Response 200 OK if get success.
+	 * 
 	 */
 	@Test
-	public void testGetSuccess() {
-		System.out.println("GET Success");
+	public void testEtagFromPost() {
 		ContentResponse contentRes;
-		long testId = 115333;
+		long testId = 123456;
+		contentRes = post(testId);
+		assertFalse("Etag shouldn't be empty.",
+				contentRes.getHeaders().get(HttpHeader.ETAG).isEmpty());
+		assertEquals("Should response with 201 created.",
+				Response.Status.CREATED.getStatusCode(), contentRes.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testEtagfromGet() {
+		ContentResponse contentRes;
+		long testId = 115322;
 		post(testId);
 		contentRes = get(testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		assertFalse("Etag shouldn't be empty.",
+				contentRes.getHeaders().get(HttpHeader.ETAG).isEmpty());
+		assertEquals("Should response with 200 OK.",
+				Response.Status.OK.getStatusCode(), contentRes.getStatus());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testEtagfromGetNoneMatchTrue() {
+		ContentResponse contentRes;
+		long testId = 1332333;
+		post(testId);
+		try {
+			contentRes = client.newRequest(serviceUrl + testId)
+					.header(HttpHeader.IF_NONE_MATCH, "\"testEtag\"")
+					.method(HttpMethod.GET).send();
+			assertEquals("Should response with 200 OK.",
+					Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		} catch (InterruptedException | TimeoutException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void testEtagfromGetNoneMatchFalse() {
+		ContentResponse contentRes;
+		ContentResponse contentResGet;
+		long testId = 11533344;
+		post(testId);
+		contentResGet = get(testId);
+		try {
+
+			contentRes = client
+					.newRequest(serviceUrl + testId)
+					.header(HttpHeader.IF_NONE_MATCH,
+							contentResGet.getHeaders().get(HttpHeader.ETAG))
+					.method(HttpMethod.GET).send();
+			assertEquals("Should response with 304 Not Modified.",
+					Response.Status.NOT_MODIFIED.getStatusCode(),
+					contentRes.getStatus());
+		} catch (InterruptedException | TimeoutException | ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Response 200 OK if put success.
 	 */
 	@Test
-	public void testPutSuccess() {
-		System.out.println("PUT Success");
+	public void testEtagFromPut() {
 		ContentResponse contentRes;
 		long testId = 1122245;
 		post(testId);
 		contentRes = put(testId, testId);
-		delete(testId);
-		System.out.println("result = " + contentRes.getStatus());
-		assertEquals(Response.Status.OK.getStatusCode(), contentRes.getStatus());
+		assertFalse("Etag shouldn't be empty.",
+				contentRes.getHeaders().get(HttpHeader.ETAG).isEmpty());
+		assertEquals("Should response with 201 created.",
+				Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
 	/**
