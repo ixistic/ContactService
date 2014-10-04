@@ -161,6 +161,10 @@ public class Contact implements Serializable {
 		return arg == null || arg.matches("\\s*");
 	}
 	
+	/**
+	 * Construct sha1(secure hash) of a text string.
+	 * @return string string of sha1
+	 */
 	public String sha1() {
 		String input = ""+id+name+title+email+phoneNumber+photoUrl;
         MessageDigest mDigest = null;
