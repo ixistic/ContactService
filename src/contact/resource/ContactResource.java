@@ -217,6 +217,11 @@ public class ContactResource {
 		return ge;
 	}
 
+	/**
+	 * Construct Etag from contact
+	 * @param contact 
+	 * @return etag Entity tag of contact
+	 */
 	public EntityTag attachEtag(Contact contact) {
 		EntityTag etag = new EntityTag(Integer.toString(contact.hashCode()));
 		return etag;
