@@ -205,20 +205,13 @@ public class WebServiceTest {
 	 * @return contentResponse
 	 */
 	public ContentResponse post(long id) {
-		StringContentProvider content = new StringContentProvider(
-				"<contact id=\""
-						+ id
-						+ "\">"
-						+ "<title>contact nickname or title</title>"
-						+ "<name>contact's full name</name>"
-						+ "<email>contact's email address</email>"
-						+ "<phoneNumber>contact's telephone number</phoneNumber>"
-						+ "</contact>");
+		StringContentProvider content = initContent(id);
+		Request req = client.newRequest(serviceUrl);
+		req = req.content(content, "application/xml");
+		req = req.method(HttpMethod.POST);
 		ContentResponse contentRes = null;
 		try {
-			contentRes = client.newRequest(serviceUrl)
-					.content(content, "application/xml")
-					.method(HttpMethod.POST).send();
+			contentRes = req.send();
 		} catch (InterruptedException | TimeoutException | ExecutionException e) {
 			e.printStackTrace();
 		}
@@ -237,17 +230,9 @@ public class WebServiceTest {
 	public ContentResponse put(long id, long idInXml) {
 		String path = serviceUrl + id;
 		Request req = client.newRequest(path);
-		req = req.method(HttpMethod.PUT);
-		StringContentProvider content = new StringContentProvider(
-				"<contact id=\""
-						+ idInXml
-						+ "\">"
-						+ "<title>contact nickname or title edited</title>"
-						+ "<name>contact's full name edited</name>"
-						+ "<email>contact's email address edited</email>"
-						+ "<phoneNumber>contact's telephone number edited</phoneNumber>"
-						+ "</contact>");
+		StringContentProvider content = initContent(idInXml);
 		req = req.content(content, "application/xml");
+		req = req.method(HttpMethod.PUT);
 		ContentResponse contentRes = null;
 		try {
 			contentRes = req.send();
@@ -275,5 +260,23 @@ public class WebServiceTest {
 			e.printStackTrace();
 		}
 		return contentRes;
+	}
+	
+	/**
+	 * Construct demo content of contact
+	 * @param id identifier of contact
+	 * @return StringContentProvider
+	 */
+	public StringContentProvider initContent(long id){
+		StringContentProvider content = new StringContentProvider(
+				"<contact id=\""
+						+ id
+						+ "\">"
+						+ "<title>contact nickname or title edited</title>"
+						+ "<name>contact's full name edited</name>"
+						+ "<email>contact's email address edited</email>"
+						+ "<phoneNumber>contact's telephone number edited</phoneNumber>"
+						+ "</contact>");
+		return content;
 	}
 }
