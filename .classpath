@@ -3,9 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jersey"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jetty"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jpa"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Derby"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Eclipselink"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jersey2"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jersey2ext"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jetty"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

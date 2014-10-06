@@ -36,6 +36,8 @@ import contact.service.mem.MemDaoFactory;
 @Singleton
 public class ContactResource {
 	private ContactDao dao;
+// For a Singleton, using UriInfo as an attribute is not safe.
+// there may be simultaneous requests for different Uri.
 	@Context
 	UriInfo uriInfo;
 
@@ -65,9 +67,11 @@ public class ContactResource {
 		} else {
 			ge = convertListToGE(dao.findAll());
 		}
+// ge will NEVER be null. ge for an empty list is an empty ge.
 		if (ge != null) {
 			return Response.ok(ge).build();
 		}
+// If request includes title param *and* no matches.
 		return Response.status(Response.Status.NOT_FOUND).build();
 
 	}

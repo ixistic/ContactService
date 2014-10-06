@@ -38,6 +38,8 @@ public class WebServiceTest {
 			String url = JettyMain.startServer(8080);
 			serviceUrl = url + "contacts/";
 			contactDao = DaoFactory.getInstance().getContactDao();
+//Good to start from a known state.
+// Not so good is directly accessing the DAO from WebServiceTest.
 			contactDao.removeAll();
 			client = new HttpClient();
 			client.start();
@@ -66,6 +68,7 @@ public class WebServiceTest {
 		ContentResponse contentRes;
 		long testId = 123456;
 		contentRes = post(testId);
+//Should test the Location header.
 		delete(testId);
 		System.out.println("result = " + contentRes.getStatus());
 		assertEquals(Response.Status.CREATED.getStatusCode(),

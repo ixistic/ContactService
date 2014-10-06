@@ -35,7 +35,7 @@ public class JpaContactDao implements ContactDao {
 	 */
 	public JpaContactDao(EntityManager em) {
 		this.em = em;
-		createTestContact();
+//		createTestContact();
 	}
 
 	/** add contacts for testing. */
@@ -98,8 +98,10 @@ public class JpaContactDao implements ContactDao {
 	@Override
 	public boolean delete(long id) {
 		Contact contact = find(id);
+//ERROR: should test contact != null
 		em.getTransaction().begin();
 		em.remove(contact);
+//ERROR: must use try catch and rollback
 		em.getTransaction().commit();
 		return true;
 
@@ -144,6 +146,7 @@ public class JpaContactDao implements ContactDao {
 			if (contact == null)
 				throw new IllegalArgumentException(
 						"Can't update a null contact");
+// Don't update contact. Use em.merge(update)
 			contact.applyUpdate(update);
 			tx.commit();
 			return true;
