@@ -60,6 +60,9 @@ public class EtagContactServiceTest {
 		contactDao.removeAll();
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagFromPost() {
 		long testId = 123456;
@@ -69,6 +72,9 @@ public class EtagContactServiceTest {
 		assertEquals("Should response with 201 created.",Response.Status.CREATED.getStatusCode(), contentRes.getStatus());
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagfromGet() {
 		long testId = 115322;
@@ -79,6 +85,9 @@ public class EtagContactServiceTest {
 		assertEquals("Should response with 200 OK.",Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagfromGetNoneMatchTrue() {
 		long testId = 1332333;
@@ -95,6 +104,9 @@ public class EtagContactServiceTest {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagfromGetNoneMatchFalse() {
 		long testId = 11533344;
@@ -114,6 +126,9 @@ public class EtagContactServiceTest {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagFromPut() {
 		long testId = 1122245;
@@ -124,6 +139,9 @@ public class EtagContactServiceTest {
 		assertEquals("Should response with 200 OK.",Response.Status.OK.getStatusCode(), contentRes.getStatus());
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagFromPutMatchTrue() {
 		long testId = 112223;
@@ -145,6 +163,9 @@ public class EtagContactServiceTest {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagFromPutMatchFalse() {
 		ContentResponse contentRes;
@@ -164,6 +185,9 @@ public class EtagContactServiceTest {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagFromDeleteMatchTrue() {
 		long testId = 19995;
@@ -183,6 +207,9 @@ public class EtagContactServiceTest {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Test
 	public void testEtagFromDeleteMatchFalse() {
 		long testId = 1999445;

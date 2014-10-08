@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Sun Oct 05 00:19:54 ICT 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0148-dc2c-c461-000004d956c0 
-on database directory /private/tmp/contactdb  with class loader sun.misc.Launcher$AppClassLoader@6da21389 
+Wed Oct 08 14:27:33 ICT 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0148-eea7-e38c-000004c6b2d8 
+on database directory /private/tmp/contactdb  with class loader sun.misc.Launcher$AppClassLoader@55c4d594 
 Loaded from file:/Users/ixistic/libws/jpa/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_60-b19
-user.dir=/Users/ixistic/git/ContactServer/ContactServer
+user.dir=/Users/ixistic/git/contactserver/contactserver
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

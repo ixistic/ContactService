@@ -41,7 +41,7 @@ public class ContactResource {
 	private ContactDao dao;
 	private CacheControl cc;
 	@Context
-	UriInfo uriInfo;
+	private UriInfo uriInfo;
 
 	/**
 	 * Construct ContactDao from DaoFactory.
@@ -72,7 +72,7 @@ public class ContactResource {
 		} else {
 			ge = convertListToGE(dao.findAll());
 		}
-		if (ge != null) {
+		if (ge.getEntity().isEmpty()) {
 			return Response.ok(ge).build();
 		}
 		return Response.status(Response.Status.NOT_FOUND).build();
