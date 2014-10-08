@@ -61,7 +61,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test client get ETag in post method.
 	 */
 	@Test
 	public void testEtagFromPost() {
@@ -73,7 +73,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test client get ETag in get method.
 	 */
 	@Test
 	public void testEtagfromGet() {
@@ -86,7 +86,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test response in get method if IF-None-Match = True should return 200 OK.
 	 */
 	@Test
 	public void testEtagfromGetNoneMatchTrue() {
@@ -105,7 +105,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test response in get method if IF-None-Match = False should return 304 Not Modified.
 	 */
 	@Test
 	public void testEtagfromGetNoneMatchFalse() {
@@ -127,7 +127,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test client get ETag in put method.
 	 */
 	@Test
 	public void testEtagFromPut() {
@@ -140,7 +140,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test response in put method if IF-Match = True should return 200 OK.
 	 */
 	@Test
 	public void testEtagFromPutMatchTrue() {
@@ -164,7 +164,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test response in put method if IF-Match = False should return 412 Precondition Failed.
 	 */
 	@Test
 	public void testEtagFromPutMatchFalse() {
@@ -186,7 +186,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test response in delete method if IF-Match = True should return 200 OK.
 	 */
 	@Test
 	public void testEtagFromDeleteMatchTrue() {
@@ -208,7 +208,7 @@ public class EtagContactServiceTest {
 	}
 
 	/**
-	 * 
+	 * Test response in delete method if IF-Match = False should return 412 Precondition Failed.
 	 */
 	@Test
 	public void testEtagFromDeleteMatchFalse() {
