@@ -182,7 +182,8 @@ public class ContactResource {
 	 * 
 	 * @param id
 	 *            identifier of contact
-	 * @return response 200 OK if contact can delete, otherwise response 404 NOT FOUND
+	 * @return response 200 OK if contact can delete, otherwise response 404 NOT
+	 *         FOUND
 	 */
 	@DELETE
 	@Path("{id}")
@@ -219,7 +220,8 @@ public class ContactResource {
 
 	/**
 	 * Construct Etag from contact
-	 * @param contact 
+	 * 
+	 * @param contact
 	 * @return etag Entity tag of contact
 	 */
 	public EntityTag attachEtag(Contact contact) {

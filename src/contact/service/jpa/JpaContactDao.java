@@ -97,6 +97,8 @@ public class JpaContactDao implements ContactDao {
 	@Override
 	public boolean delete(long id) {
 		Contact contact = find(id);
+		if(contact == null)
+			return false;
 		em.getTransaction().begin();
 		em.remove(contact);
 		em.getTransaction().commit();

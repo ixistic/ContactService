@@ -30,8 +30,26 @@ public abstract class DaoFactory {
 	 * @return instance of a concrete DaoFactory
 	 */
 	public static DaoFactory getInstance() {
-		if (factory == null) factory = MemDaoFactory.getInstance();
+		if (factory == null) {
+			String factoryclass = System.getProperty("contact.daofactory");
+			if(factoryclass != null){
+				ClassLoader loader = DaoFactory.class.getClassLoader();
+				try {
+					factory = (DaoFactory)loader.loadClass(factoryclass).newInstance();
+				} catch (InstantiationException | IllegalAccessException
+						| ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			if(factory == null){
+				setFactory( MemDaoFactory.getInstance() );
+			}
+		}
 		return factory;
+	}
+	
+	public static void setFactory(DaoFactory daoFactory){
+		factory = daoFactory;
 	}
 	
 	/**
